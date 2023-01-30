@@ -1,15 +1,15 @@
 
 
-   var index = 0;
-   
-   
-
+   var index = 0;  
 //after search button is clicked save input value to local storage and append to URL
 $("#search-button").on("click", function (event) {
    event.preventDefault();
    var city=$("#search-input").val();
-   localStorage.setItem(index, city);
+   $("#search-button").clone().appendTo("#history").addClass('history-button bg-light w-100 btn mt-3 text-dark').text(city);
 
+   console.log($('.history-button').text());
+   localStorage.setItem(index, $('.history-button').text());
+   sessionStorage.setItem(index, city);
 //get values from object (server API)
 function weatherToday(){
 var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&limit=5&appid=f77b11b08e40dc9c363bd82623c07c7f" 
@@ -31,11 +31,12 @@ $.ajax({
        url: queryURL2,
        method: "GET"
      }).then(function(response) {
-      localStorage.clear();
-        console.log(response);
-        var iconCode = response.list[0].weather[0].icon;
-        var iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
-        var now = moment().format("DD/MM/YYYY");
+         console.log(city);
+         localStorage.clear();
+         console.log(response);
+         var iconCode = response.list[0].weather[0].icon;
+         var iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
+         var now = moment().format("DD/MM/YYYY");
          $("#today").text(response.city.name + ' ' + '(' + now + ')');
          $("#today").append($('<img>').attr("src", iconUrl));
          $("#temp").text("Temp: " + (response.list[0].main.temp - 273.15).toFixed(2) + " °C");
@@ -81,16 +82,19 @@ $.ajax({
          $(".day5-t").text("Temp: " + (response.list[39].main.temp - 273.15).toFixed(2) + " °C");
          $(".day5-w").text("Wind: " + response.list[39].wind.speed + " KPH");
          $(".day5-h").text("Humidity: " + response.list[39].main.humidity + "%");
-        
-         var newButton=$('<button>');
-         $("#search-button")
-
       });
-     });
+      });
+    
    }
-   weatherToday();
-});
+    weatherToday();
 
+    $('.history-button').on("click", function(event){
+        event.preventDefault();
+        city= $(this).text();
+        console.log(city);
+        localStorage.setItem(index, city);
+        weatherToday()
+        })
+   });
 
-
-
+    
