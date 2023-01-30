@@ -2,6 +2,7 @@
 
    var index = 0;
    
+   
 
 //after search button is clicked save input value to local storage and append to URL
 $("#search-button").on("click", function (event) {
