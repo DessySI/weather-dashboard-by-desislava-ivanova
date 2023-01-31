@@ -16,7 +16,11 @@ It is easy to use app, after you type in a city/town name in the search engine y
 https://dessysi.github.io/weather-dashboard-by-desislava-ivanova/
 
 ## Image:
+<<<<<<< HEAD
 ![alt text](assets/img/weather-dashboard-img.png)
+=======
+![alt text](assets/img/weather-dashboard-by-desislava-ivanova.png)
+>>>>>>> 0e24dbbba41ef513036bdee929cf4c6d7e81950f
 
 ## Credits
 
