@@ -1,8 +1,5 @@
-header {
-    background-color: rgb(27,122,209);
-    background: linear-gradient(90deg, rgba(27,122,209,1) 0%, rgba(11,42,152,1) 48%, rgba(9,7,54,1) 100%);
-}
 
+/*adds background color to all cards*/
 .card {
     background-color: rgba(9,7,54,1);
     margin-inline: 1.6%;   

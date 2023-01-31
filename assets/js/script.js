@@ -1,27 +1,30 @@
 
-
+   //assigns 0 to var index
    var index = 0;  
-//after search button is clicked save input value to local storage and append to URL
-$("#search-button").on("click", function (event) {
+   //every time the search button is clicked , assign the value of search input to a new var 
+   //duplicates the search-button, adds classes and adds "city" as text to it and appends it to the div element with id history.
+   $("#search-button").on("click", function (event) {
    event.preventDefault();
    var city=$("#search-input").val();
    $("#search-button").clone().appendTo("#history").addClass('history-button bg-light w-100 btn mt-3 text-dark').text(city);
-
-   console.log($('.history-button').text());
+   //gets the value of 'city' and sets it in LocalStorage with key Index
    localStorage.setItem(index, $('.history-button').text());
-   sessionStorage.setItem(index, city);
-//get values from object (server API)
+
+//This  function will trigger the AJAX call, get values from object and logging the responses to elements/ new elements
 function weatherToday(){
+   //constructs the URL by adding the chosen city to it
 var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&limit=5&appid=f77b11b08e40dc9c363bd82623c07c7f" 
+// Performing GET requests to the openweathermap API 
 $.ajax({  
     url: queryURL,
     method: "GET"
+    //then assignes the responses for lat and lon to new vars and adds them in localStorage , with Index based keys
   }).then(function(response) {
      var lat = response.coord.lat;
      var lon = response.coord.lon;
-     console.log(lat, lon);
      localStorage.setItem(index+1, lat);
      localStorage.setItem(index+2, lon);
+     //then reconstructs the link with lat and lon instead of city to reach data for 5 days forecast 
    }).then(function(){
    var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?" + 
    "lat=" + localStorage.getItem(index+1) + 
@@ -31,12 +34,16 @@ $.ajax({
        url: queryURL2,
        method: "GET"
      }).then(function(response) {
-         console.log(city);
+      // removes all items from local storage to prevent multiple city results
          localStorage.clear();
-         console.log(response);
+         //assign response value to variable iconCode, to get the code for image
          var iconCode = response.list[0].weather[0].icon;
+         //constructs the img URL by adding the iconCode
          var iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
+         //shows current date
          var now = moment().format("DD/MM/YYYY");
+         //Create elements containing data from the AJAX response object
+         //repeats 5 more times to add the same for each card
          $("#today").text(response.city.name + ' ' + '(' + now + ')');
          $("#today").append($('<img>').attr("src", iconUrl));
          $("#temp").text("Temp: " + (response.list[0].main.temp - 273.15).toFixed(2) + " °C");
@@ -86,12 +93,13 @@ $.ajax({
       });
     
    }
+   //call the function
     weatherToday();
-
+   //function to show the data from previous search.
     $('.history-button').on("click", function(event){
         event.preventDefault();
+        //using this will triger the function for the current button only
         city= $(this).text();
-        console.log(city);
         localStorage.setItem(index, city);
         weatherToday()
         })
